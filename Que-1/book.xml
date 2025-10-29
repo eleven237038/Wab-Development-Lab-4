@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library>
+  <book id="1">
+    <title>Atomic Habits</title>
+    <author>James Clear</author>
+    <price>18.99</price>
+  </book>
+  <book id="2">
+    <title>Deep Work</title>
+    <author>Cal Newport</author>
+    <price>16.50</price>
+  </book>
+  <book id="3">
+    <title>Rich Dad Poor Dad</title>
+    <author>Robert Kiyosaki</author>
+    <price>7.99</price>
+  </book>
+</library>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book List - XML Lab</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; background: #f9f9f9; }
+    h1 { text-align: center; color: #2c3e50; }
+    .book { background: white; padding: 18px; margin: 12px 0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .title { font-size: 1.3em; margin: 0; color: #3498db; }
+    .author { color: #7f8c8d; font-style: italic; }
+    .price { color: #27ae60; font-weight: bold; }
+    .error { color: #e74c3c; text-align: center; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Book Library (XML)</h1>
+  <div id="books"></div>
+
+  <script>
+    fetch('book.xml')
+      .then(r => r.text())
+      .then(str => {
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(str, "application/xml");
+        if (xml.querySelector('parsererror')) throw new Error('XML 解析失败');
+
+        const books = xml.getElementsByTagName('book');
+        const container = document.getElementById('books');
+
+        Array.from(books).forEach(book => {
+          const title = book.getElementsByTagName('title')[0].textContent;
+          const author = book.getElementsByTagName('author')[0].textContent;
+          const price = book.getElementsByTagName('price')[0].textContent;
+
+          container.innerHTML += `
+            <div class="book">
+              <h2 class="title">${title}</h2>
+              <p class="author">by ${author}</p>
+              <p class="price">$${price}</p>
+            </div>
+          `;
+        });
+      })
+      .catch(err => {
+        document.getElementById('books').innerHTML = `<p class="error">${err.message}</p>`;
+      });
+  </script>
+</body>
+</html>
