@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Profiles - JSON Lab</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background: #f4f4f9;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .user {
+      background: white;
+      padding: 20px;
+      margin: 16px 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .name {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #2980b9;
+      margin: 0 0 8px 0;
+    }
+    .email {
+      color: #3498db;
+      margin: 4px 0;
+    }
+    .dob {
+      color: #7f8c8d;
+      font-style: italic;
+      margin: 4px 0;
+    }
+    .field {
+      margin: 6px 0;
+    }
+    .label {
+      font-weight: bold;
+      color: #34495e;
+    }
+    .value {
+      color: #2c3e50;
+    }
+    .error {
+      color: #e74c3c;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>👥 User Profiles (JSON)</h1>
+  <div id="users"></div>
+
+  <script>
+    fetch('userProfiles.json')
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById('users');
+
+        if (!Array.isArray(data) || data.length === 0) {
+          container.innerHTML = '<p class="error">⚠️ 未找到用户数据或数据格式不正确。</p>';
+          return;
+        }
+
+        data.forEach(user => {
+          const {
+            firstName,
+            lastName,
+            email,
+            dateOfBirth,
+            address,
+            preferences
+          } = user;
+
+          const {
+            theme,
+            language,
+            notifications,
+            subscription
+          } = preferences || {};
+
+          const {
+            street,
+            city,
+            state,
+            zipCode
+          } = address || {};
+
+          container.innerHTML += `
+            <div class="user">
+              <p class="name">${firstName} ${lastName}</p>
+              <p class="email">📧 ${email}</p>
+              <p class="dob">🎂 Date of Birth: ${dateOfBirth}</p>
+
+              <div class="field">
+                <span class="label">🏠 Address:</span><br/>
+                <span class="value">Street: ${street}, City: ${city}, State: ${state}, Zip: ${zipCode}</span>
+              </div>
+
+              <div class="field">
+                <span class="label">🎨 Preferences:</span><br/>
+                <span class="value">
+                  Theme: ${theme}, Language: ${language}, Notifications: ${notifications ? 'On' : 'Off'}, Subscribed: ${subscription ? 'Yes' : 'No'}
+                </span>
+              </div>
+            </div>
+          `;
+        });
+      })
+      .catch(err => {
+        document.getElementById('users').innerHTML = `<p class="error">❌ 加载用户数据失败: ${err.message}</p>`;
+      });
+  </script>
+</body>
+</html>
